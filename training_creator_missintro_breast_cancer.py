@@ -5,7 +5,7 @@ from model_train import model_train
 time_now = datetime.now()
 current_time_str = time_now.strftime("%Y%m%d_%H%M")
 
-model_parameters = {'architecture': 'modulate_layer_network_compdrop',
+model_properties = {'architecture': 'modulate_layer_network_compdrop',
                     'number_of_layers': 2,
                     'size_of_layers': [4, 2],
                     'compensation_layer_location': 0,
@@ -54,7 +54,7 @@ model_parameters['optimizer'] = {'name': 'SGD',
                                  'momentum': 0.9,
                                  'weight_decay': 8e-5}
 model_parameters['cost_function'] = 'cross_entropy'
-model_parameters['model_construction'] = model_parameters
+model_parameters['model_construction'] = model_properties
 model_parameters['loss_weights'] = [1.0, 1.0]
 model_parameters['time_series_length'] = []
 model_parameters['lr_scheduler'] = None
