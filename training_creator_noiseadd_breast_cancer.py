@@ -1,0 +1,62 @@
+from datetime import datetime
+from model_train import model_train
+
+
+time_now = datetime.now()
+current_time_str = time_now.strftime("%Y%m%d_%H%M")
+
+model_properties = {'architecture': 'modulate_layer_network_compdrop',
+                    'number_of_layers': 2,
+                    'size_of_layers': [4, 2],
+                    'compensation_layer_location': 0,
+                    'activation_function': 'relu',
+                    'dropout_rate': 0.5,
+                    'compensation_architecture': [8, 8],
+                    'compensation_activation': 'relu',
+                    'compensation_dropout': 0.0,
+                    'plus': False,
+                    'nan_input': False,
+                    'data_input_modulate': True}
+
+training = dict()
+training['name'] = 'sklearn_breastcancer_noiseadd_10vars'
+training['experiment_name'] = training['name'] + '_' + current_time_str
+training['description'] = 'This is a model of for predicting breast cancer from sklearn data'
+training['data_location'] = 'sklearn_breastcancer_random_noise_010_20210527_0101'
+training['use_gpu'] = True
+training['inputs'] = ['mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness',
+                      'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry',
+                      'mean fractal dimension']
+training['outputs'] = ['target']
+training['number_of_epochs'] = 50
+training['batch_size'] = 64
+training['verbose'] = True
+training['seed_value'] = 42
+training['plotting'] = False
+
+preprocessing = dict()
+preprocessing['load_nan'] = True
+preprocessing['preop_missing_imputation'] = None
+preprocessing['imbalance_compensation'] = 'none'
+preprocessing['numerical_inputs'] = ['mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness',
+                                     'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry',
+                                     'mean fractal dimension']
+preprocessing['categorical_inputs'] = []
+preprocessing['outputs'] = ['target']
+preprocessing['miss_augment'] = None
+preprocessing['miss_introduce'] = None
+preprocessing['data_subset'] = 1.0
+
+model_parameters = dict()
+model_parameters['counter'] = '0'
+model_parameters['name'] = training['name']
+model_parameters['optimizer'] = {'name': 'SGD',
+                                 'learning_rate': 0.1,
+                                 'momentum': 0.9,
+                                 'weight_decay': 8e-5}
+model_parameters['cost_function'] = 'cross_entropy'
+model_parameters['model_construction'] = model_properties
+model_parameters['loss_weights'] = [1.0, 1.0]
+model_parameters['time_series_length'] = []
+model_parameters['lr_scheduler'] = None
+model_train(model_parameters, training, preprocessing)
