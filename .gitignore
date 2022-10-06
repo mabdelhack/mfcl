@@ -1,5 +1,4 @@
 # project specific
-data/*
 training_creator_log/*.py
 results/*/
 
