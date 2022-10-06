@@ -63,142 +63,8 @@ def model_train(model_parameters, training, preprocessing):
             print('Cross-validation split number {}'.format(crossval_split))
         result_logger.set_crossvalidation_directory(crossval_split)
         data_loader.preprocess(preprocessing=preprocessing, split_number=crossval_split)
-        if model_construction['architecture'] == 'basic_dnn':
-            from models.basic_dnn import BasicDnn
-            model = BasicDnn(input_dimensions=[len(preprocessing['numerical_inputs']), len(data_loader.categorical_variables)],
-                             hidden_layers_dimensions=model_construction['size_of_layers'],
-                             activation_function_choice=model_construction['activation_function'],
-                             number_of_outputs=len(training['outputs']),
-                             dropout_rate=model_construction['dropout_rate'],
-                             number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'basic_dnn_missflag':
-            from models.basic_dnn_missflag import BasicDnn
-            model = BasicDnn(input_dimensions=[len(preprocessing['numerical_inputs']), len(data_loader.categorical_variables)],
-                             hidden_layers_dimensions=model_construction['size_of_layers'],
-                             activation_function_choice=model_construction['activation_function'],
-                             number_of_outputs=len(training['outputs']),
-                             dropout_rate=model_construction['dropout_rate'],
-                             number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'basic_dnn_missflag_hotdeck':
-            from models.basic_dnn_missflag_hotdeck import BasicDnn
-            model = BasicDnn(input_dimensions=[len(preprocessing['numerical_inputs']), len(data_loader.categorical_variables)],
-                             hidden_layers_dimensions=model_construction['size_of_layers'],
-                             activation_function_choice=model_construction['activation_function'],
-                             number_of_outputs=len(training['outputs']),
-                             dropout_rate=model_construction['dropout_rate'],
-                             number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'basic_dnn_missflag_regression':
-            from models.basic_dnn_missflag_regression import BasicDnn
-            model = BasicDnn(input_dimensions=[len(preprocessing['numerical_inputs']), len(data_loader.categorical_variables)],
-                             hidden_layers_dimensions=model_construction['size_of_layers'],
-                             activation_function_choice=model_construction['activation_function'],
-                             number_of_outputs=len(training['outputs']),
-                             dropout_rate=model_construction['dropout_rate'],
-                             number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'basic_dnn_regression':
-            from models.basic_dnn_regression import BasicDnn
-            model = BasicDnn(input_dimensions=[len(preprocessing['numerical_inputs']), len(data_loader.categorical_variables)],
-                             hidden_layers_dimensions=model_construction['size_of_layers'],
-                             activation_function_choice=model_construction['activation_function'],
-                             number_of_outputs=len(training['outputs']),
-                             dropout_rate=model_construction['dropout_rate'])
-        elif model_construction['architecture'] == 'compensate_dnn':
-            from models.compensate_dnn import CompensateDnn
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  dropout_rate=model_construction['dropout_rate'])
-        elif model_construction['architecture'] == 'compensate_dnn_nodropout':
-            from models.compensate_dnn_nodropout import CompensateDnn
-            if not 'initialization_mean' in model_construction:
-                model_construction['initialization_mean'] = 0
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  initialization_mean=model_construction['initialization_mean'])
-        elif model_construction['architecture'] == 'compensate_dnn_nodropout_batchnorm':
-            from models.compensate_dnn_nodropout import CompensateDnn
-            if not 'initialization_mean' in model_construction:
-                model_construction['initialization_mean'] = 0
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  initialization_mean=model_construction['initialization_mean'])
-        elif model_construction['architecture'] == 'additivecompensate_dnn_nodropout_batchnorm':
-            from models.additivecompensate_dnn_nodropout_batchnorm import CompensateDnn
-            if not 'initialization_mean' in model_construction:
-                model_construction['initialization_mean'] = 0
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  initialization_mean=model_construction['initialization_mean'])
-        elif model_construction['architecture'] == 'additivecompensatediag_dnn_nodropout_batchnorm':
-            from models.additivecompensatediag_dnn_nodropout_batchnorm import CompensateDnn
-            if not 'initialization_mean' in model_construction:
-                model_construction['initialization_mean'] = 0
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  initialization_mean=model_construction['initialization_mean'])
-        elif model_construction['architecture'] == 'additivecompensatediag_dnn_nodropout_batchnorm_regression':
-            from models.additivecompensatediag_dnn_nodropout_batchnorm import CompensateDnn
-            if not 'initialization_mean' in model_construction:
-                model_construction['initialization_mean'] = 0
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  initialization_mean=model_construction['initialization_mean'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_dnn_nodropout':
-            from models.mlpcompensate_dnn_nodropout import CompensateDnn
 
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_dense_dnn_nodropout':
-            from models.mlpcompensate_dense_dnn_nodropout import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'],
-                                  compensation_layer_output_size=model_construction['compensation_layer_output_size'],
-                                  number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'modulate_layer_network':
-            from models.modulate_layer_network import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'],
-                                  compensation_layer_location=model_construction['compensation_layer_location'],
-                                  number_of_classes=model_parameters['number_of_classes'],
-                                  plus=model_construction['plus'])
-        elif model_construction['architecture'] == 'modulate_layer_network_compdrop':
+        if model_construction['architecture'] == 'modulate_layer_network_compdrop':
             from models.modulate_layer_network_compdropout import CompensateDnn
 
             model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
@@ -214,88 +80,7 @@ def model_train(model_parameters, training, preprocessing):
                                   plus=model_construction['plus'],
                                   nan_input=model_construction['nan_input'],
                                   data_input_modulate=model_construction['data_input_modulate'])
-        elif model_construction['architecture'] == 'modulate_layer_network_regression':
-            from models.modulate_layer_network_regression import CompensateDnn
 
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'],
-                                  compensation_layer_location=model_construction['compensation_layer_location'],
-                                  number_of_classes=model_parameters['number_of_classes'],
-                                  plus=model_construction['plus'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_dense_dnn_nodropout_indepbias':
-            from models.mlpcompensate_dense_dnn_nodropout_indepbias import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'],
-                                  compensation_layer_output_size=model_construction['compensation_layer_output_size'],
-                                  number_of_classes=model_parameters['number_of_classes'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_lr_nodropout':
-            from models.mlpcompensate_lr_nodropout import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_dnn_nodropout_regression':
-            from models.mlpcompensate_dnn_nodropout_regression import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'])
-        elif model_construction['architecture'] == 'mlp_compensatediag_densednn_nodropout_regression':
-            from models.mlpcompensate_densednn_nodropout_regression import CompensateDnn
-
-            model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
-                                                    len(data_loader.categorical_variables)],
-                                  hidden_layers_dimensions=model_construction['size_of_layers'],
-                                  activation_function_choice=model_construction['activation_function'],
-                                  number_of_outputs=len(training['outputs']),
-                                  compensation_layer_sizes=model_construction['compensation_architecture'],
-                                  compensation_activation=model_construction['compensation_activation'],
-                                  compensation_dropout=model_construction['compensation_dropout'],
-                                  compensation_layer_output_size=model_construction['compensation_layer_output_size'])
-        elif model_construction['architecture'] == 'basic_lstm':
-            from models.basic_lstm import BasicLSTM
-            model = BasicLSTM(input_dimensions=len(preprocessing['numerical_inputs']),
-                              num_lstm_layers=model_construction['number_of_lstm_layers'],
-                              hidden_layers_dimensions=model_construction['hidden_layer_dimensions'],
-                              activation_function_choice=model_construction['activation_function'],
-                              number_of_outputs=1,
-                              dropout_rate=model_construction['dropout_rate'],
-                              bidirectional=False)
-        elif model_construction['architecture'] == 'neumiss':
-            from models.neumiss_network import Neumann
-            model = Neumann(n_features=len(preprocessing['numerical_inputs']),
-                              depth=model_construction['depth'],
-                              residual_connection=model_construction['residual_connection'],
-                              mlp_depth=model_construction['mlp_depth'],
-                              init_type=model_construction['init_type'])
-        elif model_construction['architecture'] == 'neumiss_regression':
-            from models.neumiss_network_regression import Neumann
-            model = Neumann(n_features=len(preprocessing['numerical_inputs']),
-                              depth=model_construction['depth'],
-                              residual_connection=model_construction['residual_connection'],
-                              mlp_depth=model_construction['mlp_depth'],
-                              init_type=model_construction['init_type'])
         if use_gpu:
             model = model.cuda()
         if optimizer_construction['name'] == 'SGD':
@@ -303,19 +88,7 @@ def model_train(model_parameters, training, preprocessing):
                                   lr=optimizer_construction['learning_rate'],
                                   momentum=optimizer_construction['momentum'],
                                   weight_decay=optimizer_construction['weight_decay'])
-        elif optimizer_construction['name'] == 'Adadelta':
-            optimizer = optim.Adadelta(model.parameters(),
-                                       lr=optimizer_construction['learning_rate'],
-                                       rho=optimizer_construction['rho'],
-                                       eps=optimizer_construction['eps'],
-                                       weight_decay=optimizer_construction['weight_decay'])
-        elif optimizer_construction['name'] == 'Adagrad':
-            optimizer = optim.Adagrad(model.parameters(),
-                                      lr=optimizer_construction['learning_rate'],
-                                      lr_decay=optimizer_construction['lr_decay'],
-                                      initial_accumulator_value=optimizer_construction['initial_accumulator_value'],
-                                      eps=optimizer_construction['eps'],
-                                      weight_decay=optimizer_construction['weight_decay'])
+
         elif optimizer_construction['name'] == 'Adam':
             optimizer = optim.Adam(model.parameters(),
                                    lr=optimizer_construction['learning_rate'],
@@ -323,22 +96,7 @@ def model_train(model_parameters, training, preprocessing):
                                    amsgrad=optimizer_construction['amsgrad'],
                                    eps=optimizer_construction['eps'],
                                    weight_decay=optimizer_construction['weight_decay'])
-        elif optimizer_construction['name'] == 'AdamW':
-            optimizer = optim.AdamW(model.parameters(),
-                                    lr=optimizer_construction['learning_rate'],
-                                    betas=optimizer_construction['betas'],
-                                    amsgrad=optimizer_construction['amsgrad'],
-                                    eps=optimizer_construction['eps'],
-                                    weight_decay=optimizer_construction['weight_decay'])
-        elif optimizer_construction['name'] == 'LBFGS':
-            optimizer = optim.LBFGS(model.parameters(),
-                                    lr=optimizer_construction['learning_rate'],
-                                    max_iter=optimizer_construction['max_iter'],
-                                    max_eval=optimizer_construction['max_eval'],
-                                    tolerance_grad=optimizer_construction['tolerance_grad'],
-                                    tolerance_change=optimizer_construction['tolerance_change'],
-                                    history_size=optimizer_construction['history_size'],
-                                    line_search_fn=optimizer_construction['line_search_fn'])
+
         if ('lr_scheduler' in model_parameters.keys()) and (model_parameters['lr_scheduler'] is not None):
             lr_scheduler_construction = model_parameters['lr_scheduler']
             if lr_scheduler_construction['name'] == 'LambdaLR':
