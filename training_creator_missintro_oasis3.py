@@ -33,15 +33,6 @@ training['plotting'] = False
 
 preprocessing = dict()
 preprocessing['preop_missing_imputation'] = 'default_flag'
-preprocessing['fancy_impute_parameters'] = {'name': 'IterativeImputer', 'parameters': {}}
-preprocessing['auto_impute_parameters'] = {'name': 'mice', 'parameters': {}}
-preprocessing['miwae_impute_parameters'] = {'filename': None}
-
-preprocessing['missingpy_impute_parameters'] = {'name': 'missforest', 'parameters': {}}
-preprocessing['autoencoder_parameters'] = {'hidden_layers_dimensions': [15],
-                                           'activation_function_choice': 'sigmoid',
-                                           'dropout_rate': 0.0}
-preprocessing['intraop_missing_imputation'] = []
 preprocessing['imbalance_compensation'] = 'none'
 preprocessing['numerical_inputs'] = ['Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']
 preprocessing['categorical_inputs'] = []
