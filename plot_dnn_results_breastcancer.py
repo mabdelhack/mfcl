@@ -31,13 +31,10 @@ auprc_stats_q = pd.DataFrame(columns=model_list, index=[0.0, 0.2, 0.4, 0.6, 0.8]
 
 if testing_paradigm == 'random':
     sequence = [0.0, 0.2, 0.4, 0.6, 0.8]
-    grape_additive = 0
 elif testing_paradigm == 'quantile':
     sequence = [0.2, 0.4, 0.6, 0.8]
-    grape_additive = 6
 elif testing_paradigm == 'feature':
     sequence = [1, 2, 3, 4, 5]
-    grape_additive = 10
 auroc_stats_tex = pd.DataFrame(columns=model_list, index=sequence)
 auprc_stats_tex = pd.DataFrame(columns=model_list, index=sequence)
 
