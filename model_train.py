@@ -65,7 +65,7 @@ def model_train(model_parameters, training, preprocessing):
         data_loader.preprocess(preprocessing=preprocessing, split_number=crossval_split)
 
         if model_construction['architecture'] == 'modulate_layer_network_compdrop':
-            from models.modulate_layer_network_compdropout import CompensateDnn
+            from models.modulate_layer_network import CompensateDnn
 
             model = CompensateDnn(input_dimensions=[len(preprocessing['numerical_inputs']),
                                                     len(data_loader.categorical_variables)],
