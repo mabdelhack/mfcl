@@ -10,9 +10,7 @@ from make_models import get_models
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import rcParams
-from matplotlib import ticker
-import sys
+
 n_bootstraps = 1000
 
 def seed_worker(worker_id):
