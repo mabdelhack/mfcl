@@ -1,6 +1,7 @@
 # project specific
 training_creator_log/*.py
 results/*/
+stats/
 
 
 # Byte-compiled / optimized / DLL files
