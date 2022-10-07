@@ -3,7 +3,7 @@ This repository contains codes for the architecture of a modulation layer as des
 
 Author: [Mohamed Abdelhack](https://mabdelhack.github.io/)
 
-Current Affiliation: [Whole Person Modelling Lab](https://www.felskylab.com/), Krembil Centre for Neuroinformatic
+Current Affiliation: [Whole Person Modelling Lab](https://www.felskylab.com/), Krembil Centre for Neuroinformatics
 
 ![graphical abstract](images/graphical_abstract.png)
 
@@ -27,12 +27,18 @@ Codes for training are all prefixed with ```training_creator```.
 It creates a result folder with saved models and stats from each epoch in the results folder.
 
 Codes for testing are all prefixed with ```plot_dnn_results```.
+They test for additional missingness in the test data.
 Inside of that file, there is a variable ```results_location``` that you want to plug in the name of the folder containing the training results from the ```results``` folder.
 This setting is to allow you to use the same code to test multiple conditions.
+Testing additional missingness can be performed using three paradigms based on the value of the variable ```testing_paradigm```:
+
+- Random removal ```random```
+- Removing variables above a certain quantile ```quantile```
+- Complete feature removal ```feature```
 
 ### Example:
 You ran the code ```training_creator_missintro_breastcancer.py``` and it generated the folder ```breast_cancer_20221005_2224```.
-You modify the ```results_location``` to ```breast_cancer_20221005_2224``` and run the file to get your desired results.
+Edit the ```results_location``` variable in ```plot_dnn_results_breastcancer.py``` to ```breast_cancer_20221005_2224``` and run the file to get your desired results.
 
 The MFCL layer architecture itself is located in the ```models/layers/mlp_compensate_denselayer.py```.
 The network with MFCL is located in ```models/modulate_layer_network.py```
