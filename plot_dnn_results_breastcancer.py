@@ -20,8 +20,8 @@ def seed_worker(worker_id):
 
 target_name = 'breastcancer'
 max_epoch = 49
-results_location = 'breast_cancer_20221005_2224'  # add the results folder name
-testing_paradigm = 'random'
+results_location = ''  # add the results folder name
+testing_paradigm = 'random' #choose testing paradigm (choices: random, quantile, feature)
 result_data = './results/{}/'.format(results_location)
 model_list = glob('{}*/'.format(result_data))
 auroc_stats_r = pd.DataFrame(columns=model_list, index=[0.0, 0.2, 0.4, 0.6, 0.8])
