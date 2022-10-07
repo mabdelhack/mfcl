@@ -1,12 +1,10 @@
 import os
 from random import seed
-
 import numpy as np
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
 from emr_data_loader import EmrDataLoader
 from training_log import ResultLogger
 
