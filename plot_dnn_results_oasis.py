@@ -3,14 +3,13 @@ import pandas as pd
 import os
 from emr_data_loader import EmrDataLoader
 from torch.utils.data import DataLoader
-from glob import glob
 from sklearn.metrics import roc_auc_score, average_precision_score
 from random import seed
 from make_models import get_models
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-
+from glob import glob
 n_bootstraps = 1000
 
 def seed_worker(worker_id):
@@ -18,8 +17,8 @@ def seed_worker(worker_id):
     np.random.seed(worker_seed)
     seed(worker_seed)
 
-target_name = 'breastcancer'
-max_epoch = 49
+target_name = 'oasis'
+max_epoch = 999
 results_location = ''  # add the results folder name
 testing_paradigm = 'random'  # choose testing paradigm (choices: random, quantile, feature)
 result_data = './results/{}/'.format(results_location)
@@ -49,11 +48,9 @@ for model_name in model_list:
     model_location.append(best_auroc_model)
 
 
-data_location = 'sklearn_breastcancer_quantile_highest25removed_20220426_1429'
-inputs_vars = ['mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness',
-               'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry',
-               'mean fractal dimension']
-outputs_vars = ['target']
+data_location = 'oasis3_quantile_25_20210616_0018'
+inputs_vars = ['Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']
+outputs_vars = ['Dementia']
 data_loader = EmrDataLoader(train_val_location=data_location,
                             input_variables=inputs_vars,
                             output_variables=outputs_vars,
@@ -74,7 +71,7 @@ preprocessing['imbalance_compensation'] = 'none'
 preprocessing['numerical_inputs'] = inputs_vars
 preprocessing['categorical_inputs'] = []
 preprocessing['outputs'] = outputs_vars
-models, imputation_methods = get_models(preprocessing, 4, [4, 4])
+models, imputation_methods = get_models(preprocessing, 4, [8, 4])
 
 for model_name, model, model_loc, imputation_method in zip(model_list, models, model_location, imputation_methods):
     print(model_name)
