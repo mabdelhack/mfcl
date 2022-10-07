@@ -1,4 +1,4 @@
-from models.modulate_layer_network_compdropout import CompensateDnn
+from models.modulate_layer_network import CompensateDnn
 
 
 def get_models(preprocessing, layer_size, compensation_network, deep_network=2):
