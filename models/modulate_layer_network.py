@@ -1,8 +1,10 @@
+from copy import deepcopy
+
 import torch
 import torch.nn as nn
+
 from models.layers.mlp_compensate_denselayer import MultiLayerCompensateDense as Compensation
 from models.layers.mlp_compensate_denselayer_indepbias import MultiLayerCompensateDenseIndpBias as CompensationP
-from copy import deepcopy
 
 
 class CompensateDnn(nn.Module):

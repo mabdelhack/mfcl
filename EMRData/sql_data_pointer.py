@@ -1,6 +1,7 @@
-import pandas as pd
-import warnings
 import json
+import warnings
+
+import pandas as pd
 
 
 class SqlDataPointer(object):

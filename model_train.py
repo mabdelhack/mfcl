@@ -1,12 +1,14 @@
-from tqdm import tqdm
-import torch
-from torch.utils.data import DataLoader
-import torch.optim as optim
-from training_log import ResultLogger
-import numpy as np
-from random import seed
 import os
+from random import seed
+
+import numpy as np
+import torch
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
 from emr_data_loader import EmrDataLoader
+from training_log import ResultLogger
 
 
 def seed_worker(worker_id):

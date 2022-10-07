@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np
+
 from EMRData.utils import apply_operation_list
 
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 from model_train import model_train
 
-
 time_now = datetime.now()
 current_time_str = time_now.strftime("%Y%m%d_%H%M")
 

@@ -1,17 +1,16 @@
-import pandas as pd
 import json
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import roc_curve, auc,precision_recall_curve
-from sklearn.metrics import average_precision_score
-from sklearn.metrics import roc_auc_score
-from datetime import datetime
 import os.path
+from datetime import datetime
 from os import mkdir
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve, precision_recall_curve
 from torch import save as torchsave
-from pathlib import Path
 
 
 class ResultLogger(object):

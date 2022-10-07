@@ -1,12 +1,15 @@
-import pandas as pd
-import numpy as np
-import os
-from EMRData.data_variable import DataVariable
 import json
+import os
 import warnings
-import matplotlib.pyplot as plt
-from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
 from datetime import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
+
+from EMRData.data_variable import DataVariable
+
 """
 =================================
 EMRData v0.2 30-Mar-2020

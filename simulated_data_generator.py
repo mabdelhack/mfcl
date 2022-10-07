@@ -1,7 +1,8 @@
-import numpy as np
-from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
-import pandas as pd
 import warnings
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
 
 
 class SimulatedDataGenerator(object):

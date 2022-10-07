@@ -1,9 +1,12 @@
-import pandas as pd
-from torch.utils.data.dataset import Dataset
-import torch
-import numpy as np
 from glob import glob
+
+import numpy as np
+import pandas as pd
+import torch
+from torch.utils.data.dataset import Dataset
+
 from EMRData.EMRData import EMRData
+
 
 class EmrDataLoader(Dataset):
     def __init__(self, train_val_location=None, input_variables=None, output_variables=None, torch_tensor=True,
