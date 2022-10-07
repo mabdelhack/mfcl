@@ -44,3 +44,6 @@ The MFCL layer architecture itself is located in the ```models/layers/mlp_compen
 The network with MFCL is located in ```models/modulate_layer_network.py```
 
 If you have any problems with it, open an issue here on Github or contact me through the personal website above.
+
+## Note
+The code was tested on python 3.6.7 
