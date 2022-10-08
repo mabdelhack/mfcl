@@ -27,7 +27,7 @@ Codes for training are all prefixed with ```training_creator```.
 It creates a result folder with saved models and stats from each epoch in the results folder.
 
 Codes for testing are all prefixed with ```plot_dnn_results```.
-They test for additional missingness in the test data.
+They test for additional missingness in the test data except for the noise addition one where the code plots the results of the test set.
 Inside of that file, there is a variable ```results_location``` that you want to plug in the name of the folder containing the training results from the ```results``` folder.
 This setting is to allow you to use the same code to test multiple conditions.
 Testing additional missingness can be performed using three paradigms based on the value of the variable ```testing_paradigm```:
