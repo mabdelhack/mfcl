@@ -1,5 +1,4 @@
 from glob import glob
-
 import numpy as np
 import pandas as pd
 import torch
@@ -71,6 +70,10 @@ class EmrDataLoader(Dataset):
             nan_mode = 'include'
 
         else:
+            self.nan_flag = self.data_store.flag_missing_keep_nan(preprocessing['numerical_inputs']
+                                                         + preprocessing['categorical_inputs'])
+
+
             nan_mode = None
 
         self.data_store.normalize(variable_list=preprocessing['numerical_inputs'],

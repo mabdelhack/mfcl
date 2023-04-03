@@ -129,7 +129,7 @@ class EMRData(object):
         pass
 
     def normalize(self, variable_list=None, mode='mean_std', normalizing_values=None,
-                  filter_column=None, apply_normalization=False, nan_flag=None, index_subset=None):
+                  filter_column=None, apply_normalization=False, nan_flag=None, index_subset=None, nan_mode=None):
         """Normalize numerical variables by either subtracting mean and dividing by standard deviation (mode=mean_std)
         or subtracting minimum value and dividing by maximum value (mode=min_max). It returns normalizing values for
         saving (even if they are provided in which case they are not changed)"""
@@ -169,7 +169,7 @@ class EMRData(object):
                     normalizing_values[variable] = [min_value, max_value - min_value]
             else:
                 warnings.warn('Invalid normalization! Returned raw data')
-        if nan_flag is not None and not nan_flag.empty and all(nan_flag.dtypes == bool):
+        if nan_mode is not None and (nan_flag is not None and not nan_flag.empty and all(nan_flag.dtypes == bool)):
             self.normalized_data.iloc[nan_flag[variable_list].values] = 0.0
         return normalizing_values
 
@@ -345,6 +345,11 @@ class EMRData(object):
         """This flags the missing values and replaces all of those values by zeros"""
         nan_flag = self.data[variable_list].isna()
         self.data.fillna(0, inplace=True)
+        return nan_flag
+
+    def flag_missing_keep_nan(self, variable_list=None):
+        """This flags the missing values and replaces all of those values by zeros"""
+        nan_flag = self.data[variable_list].isna()
         return nan_flag
 
     def extract_subset(self, ratio, stratify=False):
