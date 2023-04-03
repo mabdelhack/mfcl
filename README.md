@@ -1,5 +1,5 @@
 # Modulated Fully Connected Layer (MFCL)
-This repository contains codes for the architecture of a modulation layer as described in the publication TBD.
+This repository contains codes for the architecture of a modulation layer as described in the publication [A Modulation Layer to Increase Neural Network Robustness Against Data Quality Issues](https://openreview.net/forum?id=MRLHN4MSmA).
 
 Author: [Mohamed Abdelhack](https://mabdelhack.github.io/)
 
