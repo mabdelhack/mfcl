@@ -1,5 +1,7 @@
 from datetime import datetime
 from model_train import model_train
+from model_train_baseline import model_train as model_train_baseline
+
 
 time_now = datetime.now()
 current_time_str = time_now.strftime("%Y%m%d_%H%M")
@@ -53,4 +55,7 @@ model_parameters['model_construction'] = model_properties
 model_parameters['loss_weights'] = [1.0, 1.0]
 model_parameters['time_series_length'] = []
 model_parameters['lr_scheduler'] = None
-model_train(model_parameters, training, preprocessing)
+if model_properties['architecture'] == 'xgboost':
+    model_train_baseline(model_parameters, training, preprocessing)
+else:
+    model_train(model_parameters, training, preprocessing)

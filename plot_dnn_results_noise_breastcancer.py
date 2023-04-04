@@ -15,6 +15,7 @@ def seed_worker(worker_id):
     np.random.seed(worker_seed)
     seed(worker_seed)
 
+model_type = '' # add model architecture currently mfcl & xgboost is supported
 target_name = 'breastcancer'
 testing_paradigm = 'noise'
 max_epoch = 49

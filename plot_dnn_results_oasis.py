@@ -8,7 +8,7 @@ import seaborn as sns
 import torch
 from sklearn.metrics import roc_auc_score, average_precision_score
 from torch.utils.data import DataLoader
-
+import pickle
 from emr_data_loader import EmrDataLoader
 from make_models import get_models
 
@@ -19,6 +19,7 @@ def seed_worker(worker_id):
     np.random.seed(worker_seed)
     seed(worker_seed)
 
+model_type ='' # add model architecture currently mfcl & xgboost is supported
 target_name = 'oasis'
 max_epoch = 999
 results_location = ''  # add the results folder name
@@ -40,11 +41,17 @@ max_epochs = list()
 model_location = list()
 for model_name in model_list:
 
-    max_epochs.append(max_epoch)
-    best_auroc_model = os.path.join(model_name,
-                                    'crossvalidation_split_0',
-                                    'epoch_{:03d}_model.pth.tar'.format(max_epoch))
-    model_location.append(best_auroc_model)
+    if model_type == 'mfcl':
+        max_epochs.append(max_epoch)
+        best_auroc_model = os.path.join(model_name,
+                                        'crossvalidation_split_0',
+                                        'epoch_{:03d}_model.pth.tar'.format(max_epoch))
+        model_location.append(best_auroc_model)
+    elif model_type == 'xgboost':
+        best_auroc_model = glob(os.path.join(model_name,
+                                             'crossvalidation_split_0',
+                                             '*.pickle'.format(max_epoch)))
+        model_location.append(best_auroc_model[0])
 
 
 data_location = 'oasis3_quantile_25_20210616_0018'
@@ -74,8 +81,11 @@ models, imputation_methods = get_models(preprocessing, 4, [8, 4])
 
 for model_name, model, model_loc, imputation_method in zip(model_list, models, model_location, imputation_methods):
     print(model_name)
-    model_param = torch.load(model_loc, map_location=torch.device('cpu'))
-    model.load_state_dict(model_param['model_state'])
+    if model_type == 'xgboost':
+        model = pickle.load(open(model_loc, "rb"))
+    elif model_name == 'mfcl':
+        model_param = torch.load(model_loc, map_location=torch.device('cpu'))
+        model.load_state_dict(model_param['model_state'])
 
     seed_value = 0
     torch.manual_seed(seed_value)
@@ -91,32 +101,59 @@ for model_name, model, model_loc, imputation_method in zip(model_list, models, m
         preprocessing['miss_introduce'] = None
         preprocessing['miss_introduce_feature'] = None
 
-        data_loader = EmrDataLoader(train_val_location=data_location,
-                                    input_variables=inputs_vars,
-                                    output_variables=outputs_vars,
-                                    torch_tensor=True)
+        if model_type == 'mfcl':
+            data_loader = EmrDataLoader(train_val_location=data_location,
+                                        input_variables=inputs_vars,
+                                        output_variables=outputs_vars,
+                                        torch_tensor=True)
 
-        train_loader = DataLoader(data_loader, batch_size=128,
-                                  shuffle=True, num_workers=0, worker_init_fn=seed_worker)
-        if testing_paradigm == 'random':
-            preprocessing['miss_introduce'] = miss_introduce
-        elif testing_paradigm == 'quantile':
-            preprocessing['miss_introduce_quantile'] = miss_introduce
-        elif testing_paradigm == 'feature':
-            preprocessing['miss_introduce_feature'] = miss_introduce
+            train_loader = DataLoader(data_loader, batch_size=128,
+                                      shuffle=True, num_workers=0, worker_init_fn=seed_worker)
+            if testing_paradigm == 'random':
+                preprocessing['miss_introduce'] = miss_introduce
+            elif testing_paradigm == 'quantile':
+                preprocessing['miss_introduce_quantile'] = miss_introduce
+            elif testing_paradigm == 'feature':
+                preprocessing['miss_introduce_feature'] = miss_introduce
 
-        preprocessing['preop_missing_imputation'] = imputation_method
-        data_loader.preprocess(preprocessing=preprocessing, split_number=0)
-        data_loader.set_mode('validation')
-        outputs = np.array([]).reshape(0, 1)
-        targets = np.array([]).reshape(0, 1)
+            preprocessing['preop_missing_imputation'] = imputation_method
+            data_loader.preprocess(preprocessing=preprocessing, split_number=0)
+            data_loader.set_mode('validation')
+            outputs = np.array([]).reshape(0, 1)
+            targets = np.array([]).reshape(0, 1)
 
-        for batch_idx, (IDs, x_validation, y_validation) in enumerate(iter(train_loader)):
+            for batch_idx, (IDs, x_validation, y_validation) in enumerate(iter(train_loader)):
+                model.eval()
+                y_hat = model(x_validation)
+                outputs = np.vstack([outputs, y_hat.detach().numpy().reshape((-1, 1))])
+                targets = np.vstack([targets, y_validation.detach().numpy().reshape((-1, 1))])
+        elif model_type == 'xgboost':
+            data_loader = EmrDataLoader(train_val_location=data_location,
+                                        input_variables=inputs_vars,
+                                        output_variables=outputs_vars,
+                                        torch_tensor=False)
 
-            model.eval()
-            y_hat = model(x_validation)
-            outputs = np.vstack([outputs, y_hat.detach().numpy().reshape((-1, 1))])
-            targets = np.vstack([targets, y_validation.detach().numpy().reshape((-1, 1))])
+            if testing_paradigm == 'random':
+                preprocessing['miss_introduce'] = miss_introduce
+            elif testing_paradigm == 'quantile':
+                preprocessing['miss_introduce_quantile'] = miss_introduce
+            elif testing_paradigm == 'feature':
+                preprocessing['miss_introduce_feature'] = miss_introduce
+            preprocessing['preop_missing_imputation'] = imputation_method
+            data_loader.preprocess(preprocessing=preprocessing, split_number=0)
+            data_loader.set_mode('validation')
+            outputs = np.array([]).reshape(0, 1)
+            targets = np.array([]).reshape(0, 1)
+            column_selector = list(
+                np.array(data_loader.numerical_column_selector) | np.array(data_loader.categorical_column_selector))
+            IDs = data_loader.validation_data.index
+            x_validation = data_loader.validation_data.iloc[:, column_selector]
+            y_validation = data_loader.validation_data.iloc[:, data_loader.output_column_selector].values.ravel()
+            y_hat = model.predict_proba(x_validation.values)
+            y_hat = y_hat[:, 1]
+
+            outputs = y_hat
+            targets = y_validation
 
         average_precision = average_precision_score(targets, outputs)
         auroc = roc_auc_score(targets, outputs)

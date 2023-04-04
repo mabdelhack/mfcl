@@ -1,21 +1,28 @@
 from datetime import datetime
 from model_train import model_train
+from model_train_baseline import model_train as model_train_baseline
 
 time_now = datetime.now()
 current_time_str = time_now.strftime("%Y%m%d_%H%M")
 
-model_properties = {'architecture': 'modulate_layer_network_compdrop',
-                    'number_of_layers': 2,
-                    'size_of_layers': [4, 2],
-                    'compensation_layer_location': 0,
-                    'activation_function': 'relu',
-                    'dropout_rate': 0.5,
-                    'compensation_architecture': [4, 4],
-                    'compensation_activation': 'relu',
-                    'compensation_dropout': 0.0,
-                    'plus': False,
-                    'nan_input': False,
-                    'data_input_modulate': True}
+# model_properties = {'architecture': 'modulate_layer_network_compdrop',
+#                     'number_of_layers': 2,
+#                     'size_of_layers': [4, 2],
+#                     'compensation_layer_location': 0,
+#                     'activation_function': 'relu',
+#                     'dropout_rate': 0.5,
+#                     'compensation_architecture': [4, 4],
+#                     'compensation_activation': 'relu',
+#                     'compensation_dropout': 0.0,
+#                     'plus': False,
+#                     'nan_input': False,
+#                     'data_input_modulate': True}
+
+model_properties = {'architecture': 'xgboost',
+                      'number_of_estimators': 100,
+                      'learning_rate': 0.3,
+                      'max_depth': 6
+                      }
 
 training = dict()
 training['name'] = 'breast_cancer'
@@ -57,4 +64,7 @@ model_parameters['model_construction'] = model_properties
 model_parameters['loss_weights'] = [1.0, 1.0]
 model_parameters['time_series_length'] = []
 model_parameters['lr_scheduler'] = None
-model_train(model_parameters, training, preprocessing)
+if model_properties['architecture'] == 'xgboost':
+    model_train_baseline(model_parameters, training, preprocessing)
+else:
+    model_train(model_parameters, training, preprocessing)
