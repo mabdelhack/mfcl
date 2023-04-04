@@ -10,6 +10,7 @@ Current Affiliation: [Whole Person Modelling Lab](https://www.felskylab.com/), K
 The MFCL introduces the concept of variable weights to the fully connected layer thus enabling a compact implementation of the multiplication process.
 The weights can be modulated by the modulating signal.
 In this example we test modulating signals guided by missingness pattern or signal quality measures.
+We also test the XGBoost model as a comparison target.
 
 ## Datasets
 
